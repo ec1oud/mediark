@@ -1,0 +1,5 @@
+A Qt program which efficiently handles a stream of disks (floppies, CDs or
+whatever), capturing optical images using a scanner and simultaneously
+grabbing the data contents to disk image files (similar to dd).
+
+Also can browse, search and mount images thus captured.
