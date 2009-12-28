@@ -1,6 +1,8 @@
 #include "capturedialog.h"
 #include "ui_capturedialog.h"
 #include "settings.h"
+#include "copycat.h"
+#include "plugin.h"
 #include <QDebug>
 
 CaptureDialog::CaptureDialog(QWidget *parent) :
@@ -41,12 +43,29 @@ void CaptureDialog::showEvent(QShowEvent* event)
 	m_ui->captureProgressBar->setValue(0);
 	m_ui->scanImageLabel->setText("Disk\nImage");
 	m_ui->captureImageLabel->setText("Disk\nImage");
+	update();
 }
 
 void CaptureDialog::on_scanButton_clicked()
 {
 //	QRectF scanArea = Settings::instance()->scanGeometry(m_ui->mediaTypes->currentText());
 //	qDebug() << "scan area: " << scanArea;
-	QImage img = m_scanner->scan(m_ui->mediaTypes->currentText());
-	m_ui->scanImageLabel->setPixmap(QPixmap::fromImage(img));
+	m_scannedImage = m_scanner->scan(m_ui->mediaTypes->currentText());
+	m_ui->scanImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
+}
+
+void CaptureDialog::on_captureButton_clicked()
+{
+	m_ui->captureImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
+	m_ui->scanImageLabel->setText("Disk\nImage");
+	CopyCat::instance()->go(m_ui->captureProgressBar, m_scannedImage);
+	CaptureDialog::update();
+	m_ui->captureImageLabel->setText("Disk\nImage");
+}
+
+void CaptureDialog::update()
+{
+	m_ui->captureDataLabel->setText(QString("%1 -> %2")
+		.arg(CopyCat::instance()->devicePath().absoluteFilePath())
+		.arg(CopyCat::instance()->currentPlugin()->nextImageOutput().absoluteFilePath()));
 }

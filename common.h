@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <QDebug>
+#include "settings.h"
 
 #define STR_ORGANIZATION "Electron Cloud"
 #define STR_PRODUCT "MediArk"
@@ -14,5 +15,7 @@
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
+
+#define RECORD_SIZE_BYTES 1024
 
 #endif // COMMON_H

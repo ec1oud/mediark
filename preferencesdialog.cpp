@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "ui_preferencesdialog.h"
 #include "imagescanner.h"
+#include "copycat.h"
 #include <QDebug>
 
 PreferencesDialog::PreferencesDialog(QWidget *parent) :
@@ -35,6 +36,7 @@ void PreferencesDialog::showEvent(QShowEvent* event)
 	/// @todo thread this
 	foreach (QString scanner, ImageScanner::instance()->allScannerNames())
 		m_ui->scannerBox->addItem(scanner);
+	m_ui->captureMethodBox->addItems(CopyCat::instance()->allPlugins());
 }
 
 void PreferencesDialog::on_scannerBox_currentIndexChanged(int index)

@@ -17,12 +17,15 @@ public:
 protected:
     void changeEvent(QEvent *e);
 	void showEvent(QShowEvent* event);
+	void update();
 
 private:
     Ui::CaptureDialog *m_ui;
 	ImageScanner* m_scanner;
+	QImage m_scannedImage;
 
 private slots:
+	void on_captureButton_clicked();
 	void on_scanButton_clicked();
 };
 

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>MediArk</string>
   </property>
   <widget class="QWidget" name="centralWidget"/>
   <widget class="QMenuBar" name="menuBar">
@@ -59,17 +59,29 @@
   </action>
   <action name="actionOpen_archive_dir">
    <property name="text">
-    <string>Open archive dir...</string>
+    <string>&amp;Open archive dir...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionNew_sequence">
    <property name="text">
-    <string>New sequence...</string>
+    <string>&amp;New sequence...</string>
+   </property>
+   <property name="toolTip">
+    <string>Create a new set of disk images within the open archive directory</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
   <action name="actionAdd_media">
    <property name="text">
-    <string>Add media...</string>
+    <string>&amp;Add media...</string>
+   </property>
+   <property name="toolTip">
+    <string>Capture disk images and add them to the selected set</string>
    </property>
   </action>
  </widget>

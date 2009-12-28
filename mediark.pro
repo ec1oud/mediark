@@ -9,16 +9,25 @@ SOURCES += main.cpp \
     capturedialog.cpp \
     settings.cpp \
     imagescanner.cpp \
-    preferencesdialog.cpp
+    preferencesdialog.cpp \
+    newsequencedialog.cpp \
+    ddplugin.cpp \
+    copycat.cpp \
+    plugin.cpp
 HEADERS += mainwindow.h \
     capturedialog.h \
     settings.h \
     common.h \
     imagescanner.h \
-    preferencesdialog.h
+    preferencesdialog.h \
+    newsequencedialog.h \
+    ddplugin.h \
+    copycat.h \
+    plugin.h
 FORMS += mainwindow.ui \
     capturedialog.ui \
-    preferencesdialog.ui
+    preferencesdialog.ui \
+    newsequencedialog.ui
 LIBS += -lsane
 OTHER_FILES += TODO.txt
 RESOURCES += images.qrc
