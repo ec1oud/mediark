@@ -10,9 +10,13 @@ namespace Ui {
 
 class CaptureDialog : public QDialog {
     Q_OBJECT
+
 public:
     CaptureDialog(QWidget *parent = 0);
     ~CaptureDialog();
+
+public slots:
+	void imageScanned(QImage img);
 
 protected:
     void changeEvent(QEvent *e);

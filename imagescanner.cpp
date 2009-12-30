@@ -94,23 +94,29 @@ QStringList ImageScanner::allScannerNames()
 
 QString scannerDev(int idx);
 
-QImage ImageScanner::scan(QString mediaType)
+void ImageScanner::scan(QString mediaType)
+{
+	m_mediaType = mediaType;
+	start();
+}
+
+void ImageScanner::run()
 {
 	QString scannerDev = Settings::instance()->chosenScanner();
 	if (scannerDev.isEmpty())
 	{
 		QMessageBox::warning(QApplication::activeWindow(), tr(STR_PRODUCT),
 			tr("Please choose a scanner first (in preferences)."));
-		return QImage();
+		emit done(QImage());
 	}
 	SANE_Status status = sane_open(scannerDev.toAscii().constData(), &m_scanner);
 	if (status != SANE_STATUS_GOOD)
 	{
 		QMessageBox::critical(QApplication::activeWindow(), tr(STR_PRODUCT),
 			tr("Failed to open scanner: '%1'").arg(scannerDev));
-		return QImage();
+		emit done(QImage());
 	}
-	setOptions(m_scanner, mediaType);
+	setOptions(m_scanner, m_mediaType);
 	//	qDebug("resolution: %d\n", get_resolution(m_scanner));
 	getOptions(m_scanner);
 	status = sane_start (m_scanner);
@@ -118,7 +124,7 @@ QImage ImageScanner::scan(QString mediaType)
 	{
 		QMessageBox::critical(QApplication::activeWindow(), tr(STR_PRODUCT),
 			tr("sane_start failed for scanner: '%1'").arg(scannerDev));
-		return QImage();
+		emit done(QImage());
 	}
 	SANE_Parameters params;
 	//	params.pixels_per_line = area.width();
@@ -128,7 +134,7 @@ QImage ImageScanner::scan(QString mediaType)
 	{
 		QMessageBox::critical(QApplication::activeWindow(), tr(STR_PRODUCT),
 			tr("sane_get_parameters failed for scanner: '%1'").arg(scannerDev));
-		return QImage();
+		emit done(QImage());
 	}
 	qDebug("image type is %d; RGB (which we hope for) is %d", params.format, SANE_FRAME_RGB);
 	qDebug("Pixels per line: %d lines: %d depth: %d\n",
@@ -138,7 +144,7 @@ QImage ImageScanner::scan(QString mediaType)
 		QMessageBox::critical(QApplication::activeWindow(), tr(STR_PRODUCT),
 			tr("This application supports only RGB images, and\n"
 			"your scanner apparently doesn't (or at least not by default)."));
-		return QImage();
+		emit done(QImage());
 	}
 
 	QImage ret(params.pixels_per_line, params.lines, QImage::Format_RGB888);
@@ -151,10 +157,8 @@ QImage ImageScanner::scan(QString mediaType)
 		status = sane_read(m_scanner, ret.scanLine(line++), params.bytes_per_line, &len);
 		emit progress(line);
 	}
-
-	return ret;
+	emit done(ret);
 }
-
 
 QString ImageScanner::scannerDev(int idx)
 {

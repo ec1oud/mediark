@@ -17,6 +17,8 @@ CaptureDialog::CaptureDialog(QWidget *parent) :
 			m_ui->scanProgressBar, SLOT(setRange(int,int)));
 	connect(m_scanner, SIGNAL(progress(int)),
 			m_ui->scanProgressBar, SLOT(setValue(int)));
+	connect(m_scanner, SIGNAL(done(QImage)),
+			this, SLOT(imageScanned(QImage)));
 }
 
 CaptureDialog::~CaptureDialog()
@@ -36,6 +38,12 @@ void CaptureDialog::changeEvent(QEvent *e)
     }
 }
 
+void CaptureDialog::imageScanned(QImage img)
+{
+	m_scannedImage = img;
+	m_ui->scanImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
+}
+
 void CaptureDialog::showEvent(QShowEvent* event)
 {
 	m_ui->scannerDevLabel->setText(Settings::instance()->chosenScanner());
@@ -50,8 +58,7 @@ void CaptureDialog::on_scanButton_clicked()
 {
 //	QRectF scanArea = Settings::instance()->scanGeometry(m_ui->mediaTypes->currentText());
 //	qDebug() << "scan area: " << scanArea;
-	m_scannedImage = m_scanner->scan(m_ui->mediaTypes->currentText());
-	m_ui->scanImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
+	m_scanner->scan(m_ui->mediaTypes->currentText());
 }
 
 void CaptureDialog::on_captureButton_clicked()

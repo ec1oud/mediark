@@ -4,13 +4,14 @@
 
 #include <QObject>
 #include <QImage>
+#include <QThread>
 
-class ImageScanner : public QObject
+class ImageScanner : public QThread
 {
 	Q_OBJECT
 public:
 	static ImageScanner* instance();
-	QImage scan(QString mediaType);
+	void scan(QString mediaType);
 	QStringList allScannerNames();
 	QString scannerDev(int idx);
 
@@ -19,6 +20,10 @@ public slots:
 signals:
 	void progress(int val);
 	void progressRange(int zero, int max);
+	void done(QImage img);
+
+protected:
+	void run();
 
 private:
 	ImageScanner();
@@ -27,6 +32,8 @@ private:
 
 	QList<const SANE_Device*> m_allDevices;
 	SANE_Handle m_scanner;
+	QString m_mediaType;
+//	QImage m_scannedImage;
 };
 
 #endif // IMAGESCANNER_H
