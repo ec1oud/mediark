@@ -19,6 +19,8 @@ public:
 	QStringList allPlugins();
 	QFileInfo devicePath() { return m_devicePath; }
 	void setDevicePath(QFileInfo dp);
+	int nextSequenceNumber() { return m_currentPlugin->nextSequenceNumber(); }
+	void setNextSequenceNumber(int v);
 	/**
 		Go kitty go
 	*/

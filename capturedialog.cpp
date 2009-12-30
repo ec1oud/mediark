@@ -19,6 +19,7 @@ CaptureDialog::CaptureDialog(QWidget *parent) :
 			m_ui->scanProgressBar, SLOT(setValue(int)));
 	connect(m_scanner, SIGNAL(done(QImage)),
 			this, SLOT(imageScanned(QImage)));
+	m_ui->captureSequenceNumber->setValue(CopyCat::instance()->nextSequenceNumber());
 }
 
 CaptureDialog::~CaptureDialog()
@@ -75,4 +76,15 @@ void CaptureDialog::update()
 	m_ui->captureDataLabel->setText(QString("%1 -> %2")
 		.arg(CopyCat::instance()->devicePath().absoluteFilePath())
 		.arg(CopyCat::instance()->currentPlugin()->nextImageOutput().absoluteFilePath()));
+}
+
+void CaptureDialog::on_scanSequenceNumber_valueChanged(int val)
+{
+	update();
+}
+
+void CaptureDialog::on_captureSequenceNumber_valueChanged(int val)
+{
+	CopyCat::instance()->setNextSequenceNumber(val);
+	update();
 }

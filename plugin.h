@@ -22,6 +22,8 @@ public:
 	void setPathAndSequenceStart(QFileInfo path, int start = 0);
 	QFileInfo takeNextImageOutput();
 	QFileInfo nextImageOutput();
+	int nextSequenceNumber() { return m_sequence; }
+	void setNextSequenceNumber(int val) { m_sequence = val; }
 	virtual void start(QFileInfo device) = 0;
 	virtual QString name() = 0;
 	virtual QString fileExt() = 0;

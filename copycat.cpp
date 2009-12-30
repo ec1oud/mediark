@@ -35,6 +35,11 @@ QStringList CopyCat::allPlugins()
 	return plugins.keys();
 }
 
+void CopyCat::setNextSequenceNumber(int v)
+{
+	m_currentPlugin->setNextSequenceNumber(v);
+}
+
 void CopyCat::go(QProgressBar* progressBar, QImage scannedImage)
 {
 	m_image = scannedImage;

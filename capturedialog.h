@@ -29,6 +29,8 @@ private:
 	QImage m_scannedImage;
 
 private slots:
+	void on_scanSequenceNumber_valueChanged(int );
+	void on_captureSequenceNumber_valueChanged(int );
 	void on_captureButton_clicked();
 	void on_scanButton_clicked();
 };
