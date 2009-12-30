@@ -4,6 +4,7 @@
 TARGET = mediark
 TEMPLATE = app
 CONFIG += debug
+QT += dbus
 SOURCES += main.cpp \
     mainwindow.cpp \
     capturedialog.cpp \
@@ -13,7 +14,9 @@ SOURCES += main.cpp \
     newsequencedialog.cpp \
     ddplugin.cpp \
     copycat.cpp \
-    plugin.cpp
+    plugin.cpp \
+    devicefinder.cpp \
+    hal_manager_interface.cpp
 HEADERS += mainwindow.h \
     capturedialog.h \
     settings.h \
@@ -23,7 +26,9 @@ HEADERS += mainwindow.h \
     newsequencedialog.h \
     ddplugin.h \
     copycat.h \
-    plugin.h
+    plugin.h \
+    devicefinder.h \
+    hal_manager_interface.h
 FORMS += mainwindow.ui \
     capturedialog.ui \
     preferencesdialog.ui \

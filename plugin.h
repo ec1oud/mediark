@@ -29,6 +29,7 @@ public:
 signals:
 	void totalRecords(int zero, int num);
 	void recordsCopied(int num);
+	void done(bool success);
 
 protected:
 	int m_sequence;

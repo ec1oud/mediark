@@ -1,6 +1,7 @@
 #include "newsequencedialog.h"
 #include "ui_newsequencedialog.h"
 #include "copycat.h"
+#include "devicefinder.h"
 
 NewSequenceDialog::NewSequenceDialog(QFileInfo basePath, QWidget *parent) :
     QDialog(parent),
@@ -13,6 +14,7 @@ NewSequenceDialog::NewSequenceDialog(QFileInfo basePath, QWidget *parent) :
 	m_ui->sourceDriveBox->addItem(CopyCat::instance()->devicePath().absoluteFilePath());
 	/// @todo populate choices with all the removable drives via HAL (DBus)
 	/// http://indhubharathi.wordpress.com/2008/08/17/listing-all-removable-devices-in-linux/
+	DeviceFinder finder;
 }
 
 NewSequenceDialog::~NewSequenceDialog()
@@ -51,6 +53,11 @@ void NewSequenceDialog::on_imageFormatBox_currentIndexChanged(QString name)
 
 void NewSequenceDialog::on_buttonBox_accepted()
 {
+	QFileInfo fi(m_ui->directoryPathLabel->text());
+	if (!fi.exists())
+	{
+		fi.dir().mkdir(fi.fileName());
+	}
 	CopyCat::instance()->setDevicePath(QFileInfo(m_ui->sourceDriveBox->currentText()));
 	CopyCat::instance()->currentPlugin()->
 			setPathAndSequenceStart(m_ui->directoryPathLabel->text());
