@@ -37,15 +37,22 @@ QStringList CopyCat::allPlugins()
 
 void CopyCat::go(QProgressBar* progressBar, QImage scannedImage)
 {
+	m_image = scannedImage;
 	Plugin* impl = CopyCat::instance()->currentPlugin();
 	connect(impl, SIGNAL(totalRecords(int, int)),
 			progressBar, SLOT(setRange(int,int)));
 	connect(impl, SIGNAL(recordsCopied(int)),
 			progressBar, SLOT(setValue(int)));
-	QFileInfo diskImagePath = impl->nextImageOutput();
-	QFileInfo scannedImagePath(diskImagePath.dir(), diskImagePath.baseName() + ".jpg");
-	scannedImage.save(scannedImagePath.absoluteFilePath());
-	impl->start(devicePath());
+	start();
 
 	/// @todo disconnect signals when done
+}
+
+void CopyCat::run()
+{
+	Plugin* impl = CopyCat::instance()->currentPlugin();
+	QFileInfo diskImagePath = impl->nextImageOutput();
+	QFileInfo scannedImagePath(diskImagePath.dir(), diskImagePath.baseName() + ".jpg");
+	m_image.save(scannedImagePath.absoluteFilePath());
+	impl->start(devicePath());
 }

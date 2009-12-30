@@ -3,13 +3,14 @@
 
 #include <QObject>
 #include <QProgressBar>
+#include <QThread>
 #include "plugin.h"
 
 /**
 	A really talented cat who can learn how to copy media in any way you like
 	(if provided instructions in the form of a Plugin).
 */
-class CopyCat : public QObject
+class CopyCat : public QThread
 {
 public:
 	static CopyCat* instance();
@@ -23,11 +24,15 @@ public:
 	*/
 	void go(QProgressBar* progressBar, QImage scannedImage);
 
+protected:
+	void run();
+
 private:
 	CopyCat();
 	QMap<QString, Plugin*> plugins;
 	Plugin* m_currentPlugin;
 	QFileInfo m_devicePath;
+	QImage m_image;
 };
 
 #endif // COPYCAT_H
