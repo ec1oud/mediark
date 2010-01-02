@@ -10,8 +10,17 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     m_ui(new Ui::PreferencesDialog)
 {
     m_ui->setupUi(this);
+	int idx = 0;
+	int chosenIdx = 0;
+	QString chosenType = Settings::instance()->stringOrDefault(SETTING_GROUP_SESSION, "media-type", "");
 	foreach(QString mt, Settings::instance()->allMediaTypes())
+	{
 		m_ui->mediaTypes->addItem(mt);
+		if (chosenType == mt)
+			chosenIdx = idx;
+		++idx;
+	}
+	m_ui->mediaTypes->setCurrentIndex(chosenIdx);
 }
 
 PreferencesDialog::~PreferencesDialog()

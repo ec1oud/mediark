@@ -18,10 +18,10 @@ Settings::Settings(QObject* parent) :
 	beginGroup(SETTING_GROUP_SCAN_GEOMETRY);
 	QRectF r = parseGeometryString(value(FIVE_N_QUARTER_INCH).toString());
 	if (r.isNull())
-		setValue(FIVE_N_QUARTER_INCH, QVariant(toString(QRectF(0, 0, 150, 150))));
+		setValue(FIVE_N_QUARTER_INCH, QVariant(toString(QRectF(0, 0, 143, 136))));
 	r = parseGeometryString(value(THREE_N_HALF_INCH).toString());
 	if (r.isNull())
-		setValue(THREE_N_HALF_INCH, QVariant(toString(QRectF(0, 0, 90, 94))));
+		setValue(THREE_N_HALF_INCH, QVariant(toString(QRectF(0, 0, 90, 95))));
 	endGroup();
 	if (intOrDefault("main", "resolution", -1) < 0)
 		setInt("main", "resolution", 300);

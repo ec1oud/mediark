@@ -11,8 +11,17 @@ CaptureDialog::CaptureDialog(QWidget *parent) :
 	m_scanner(ImageScanner::instance())
 {
     m_ui->setupUi(this);
+	int idx = 0;
+	int chosenIdx = 0;
+	QString chosenType = Settings::instance()->stringOrDefault(SETTING_GROUP_SESSION, "media-type", "");
 	foreach(QString mt, Settings::instance()->allMediaTypes())
+	{
 		m_ui->mediaTypes->addItem(mt);
+		if (chosenType == mt)
+			chosenIdx = idx;
+		++idx;
+	}
+	m_ui->mediaTypes->setCurrentIndex(chosenIdx);
 	connect(m_scanner, SIGNAL(progressRange(int,int)),
 			m_ui->scanProgressBar, SLOT(setRange(int,int)));
 	connect(m_scanner, SIGNAL(progress(int)),
@@ -97,6 +106,7 @@ void CaptureDialog::on_mediaTypes_currentIndexChanged(QString mediaType)
 	QSize matrixDims = Settings::instance()->matrixDims(mediaType);
 	m_ui->scanSequenceTo->setValue(m_ui->scanSequenceFrom->value() +
 								   matrixDims.width() * matrixDims.height() - 1);
+	Settings::instance()->setString(SETTING_GROUP_SESSION, "media-type", mediaType);
 }
 
 void CaptureDialog::on_scanSequenceFrom_valueChanged(int )
