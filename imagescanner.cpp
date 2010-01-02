@@ -4,6 +4,7 @@
 #include <sane/saneopts.h>
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
 #include <QMessageBox>
 
 /**
@@ -91,8 +92,21 @@ QStringList ImageScanner::allScannerNames()
 	return ret;
 }
 
+void ImageScanner::setSequence(int start, int end)
+{
+	m_sequenceStart = start;
+	m_sequence = start;
+	m_sequenceEnd = end;
+}
 
-QString scannerDev(int idx);
+QFileInfo ImageScanner::nextImageOutput()
+{
+	QFileInfo ret(QString("%1/image%2.jpg").arg(
+		Settings::instance()->stringOrDefault(SETTING_GROUP_SESSION, "sequenceDir", ""))
+//				m_outputImagePath.fileName()
+		.arg(m_sequence, 4, 10, QLatin1Char('0')));
+	return ret;
+}
 
 void ImageScanner::scan(QString mediaType)
 {
@@ -147,16 +161,32 @@ void ImageScanner::run()
 		emit done(QImage());
 	}
 
-	QImage ret(params.pixels_per_line, params.lines, QImage::Format_RGB888);
+	QImage all(params.pixels_per_line, params.lines, QImage::Format_RGB888);
 	int line = 0;
 	emit progressRange(0, params.lines);
 	while (status == SANE_STATUS_GOOD)
 	{
 		//		SANE_Byte data[params.bytes_per_line];
 		SANE_Int len = 0;
-		status = sane_read(m_scanner, ret.scanLine(line++), params.bytes_per_line, &len);
+		status = sane_read(m_scanner, all.scanLine(line++), params.bytes_per_line, &len);
 		emit progress(line);
 	}
+
+	// Break up and save images according to matrix
+	QImage ret;
+	QSize matrixDims = Settings::instance()->matrixDims(m_mediaType);
+	int cellW = all.width() / matrixDims.width();
+	int cellH = all.height() / matrixDims.height();
+	for (int row = 0; row < matrixDims.height(); ++row)
+		for (int col = 0; col < matrixDims.width() && m_sequence < m_sequenceEnd; ++col)
+		{
+			QImage cell = all.copy(col * cellW, row * cellH, cellW, cellH);
+			if (ret.isNull())
+				ret = cell;
+			cell.save(nextImageOutput().absoluteFilePath());
+			++m_sequence;
+		}
+
 	emit done(ret);
 }
 
@@ -172,10 +202,13 @@ void ImageScanner::setOptions(SANE_Handle dev, QString mediaType)
 	SANE_Word val;
 	SANE_Int num_options, i;
 	const SANE_Option_Descriptor *option_desc;
-	QRectF scanArea = Settings::instance()->scanGeometry(mediaType);
+	QRectF individualScanArea = Settings::instance()->scanGeometry(mediaType);
+	QSize matrixDims = Settings::instance()->matrixDims(mediaType);
+	QRectF scanArea = individualScanArea;
+	scanArea.setWidth(individualScanArea.width() * matrixDims.width());
+	scanArea.setHeight(individualScanArea.height() * matrixDims.height());
 
-	status =
-		sane_control_option (dev, 0, SANE_ACTION_GET_VALUE, &num_options, 0);
+	status = sane_control_option (dev, 0, SANE_ACTION_GET_VALUE, &num_options, 0);
 	if (status != SANE_STATUS_GOOD)
 	{
 		qDebug("failed to get the number of options");
@@ -193,7 +226,7 @@ void ImageScanner::setOptions(SANE_Handle dev, QString mediaType)
 			if (strncmp (optName, SANE_NAME_SCAN_RESOLUTION,
 				sizeof (SANE_NAME_SCAN_RESOLUTION)) == 0)
 			{
-				val = 300;						  /// @todo
+				val = Settings::instance()->intOrDefault(SETTING_GROUP_MAIN, "resolution", 300);
 				status = sane_control_option (dev, i, SANE_ACTION_SET_VALUE, &val, 0);
 				if (status != SANE_STATUS_GOOD)
 					qDebug() << "failed to set resolution";

@@ -31,7 +31,7 @@ void PreferencesDialog::changeEvent(QEvent *e)
     }
 }
 
-void PreferencesDialog::showEvent(QShowEvent* event)
+void PreferencesDialog::showEvent(QShowEvent* /*event*/)
 {
 	/// @todo thread this
 	foreach (QString scanner, ImageScanner::instance()->allScannerNames())
@@ -129,13 +129,13 @@ void PreferencesDialog::updateDimensionLabels(QRectF rect)
 	m_ui->heightLabel->setText(QString::number(rect.height()));
 }
 
-void PreferencesDialog::on_matrixColumns_valueChanged(int val)
+void PreferencesDialog::on_matrixColumns_valueChanged(int)
 {
 	Settings::instance()->setMatrixDims(m_ui->mediaTypes->currentText(),
 		QSize(m_ui->matrixColumns->value(), m_ui->matrixRows->value()));
 }
 
-void PreferencesDialog::on_matrixRows_valueChanged(int val)
+void PreferencesDialog::on_matrixRows_valueChanged(int)
 {
 	Settings::instance()->setMatrixDims(m_ui->mediaTypes->currentText(),
 		QSize(m_ui->matrixColumns->value(), m_ui->matrixRows->value()));

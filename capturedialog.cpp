@@ -46,7 +46,6 @@ void CaptureDialog::imageScanned(QImage img)
 
 void CaptureDialog::showEvent(QShowEvent* event)
 {
-	m_ui->scannerDevLabel->setText(Settings::instance()->chosenScanner());
 	m_ui->scanProgressBar->setValue(0);
 	m_ui->captureProgressBar->setValue(0);
 	m_ui->scanImageLabel->setText("Disk\nImage");
@@ -59,6 +58,7 @@ void CaptureDialog::on_scanButton_clicked()
 {
 //	QRectF scanArea = Settings::instance()->scanGeometry(m_ui->mediaTypes->currentText());
 //	qDebug() << "scan area: " << scanArea;
+	m_scanner->setSequence(m_ui->scanSequenceFrom->value(), m_ui->scanSequenceTo->value() + 1);
 	m_scanner->scan(m_ui->mediaTypes->currentText());
 }
 
@@ -73,6 +73,9 @@ void CaptureDialog::on_captureButton_clicked()
 
 void CaptureDialog::update()
 {
+	m_ui->scanPathLabel->setText(QString("%1 -> %2")
+		.arg(Settings::instance()->chosenScanner())
+		.arg(m_scanner->nextImageOutput().absoluteFilePath()));
 	m_ui->captureDataLabel->setText(QString("%1 -> %2")
 		.arg(CopyCat::instance()->devicePath().absoluteFilePath())
 		.arg(CopyCat::instance()->currentPlugin()->nextImageOutput().absoluteFilePath()));
@@ -86,5 +89,28 @@ void CaptureDialog::on_scanSequenceNumber_valueChanged(int val)
 void CaptureDialog::on_captureSequenceNumber_valueChanged(int val)
 {
 	CopyCat::instance()->setNextSequenceNumber(val);
+	update();
+}
+
+void CaptureDialog::on_mediaTypes_currentIndexChanged(QString mediaType)
+{
+	QSize matrixDims = Settings::instance()->matrixDims(mediaType);
+	m_ui->scanSequenceTo->setValue(m_ui->scanSequenceFrom->value() +
+								   matrixDims.width() * matrixDims.height() - 1);
+}
+
+void CaptureDialog::on_scanSequenceFrom_valueChanged(int )
+{
+	QSize matrixDims = Settings::instance()->matrixDims(m_ui->mediaTypes->currentText());
+	m_scanner->setSequence(m_ui->scanSequenceFrom->value(), m_ui->scanSequenceTo->value() + 1);
+	m_ui->scanSequenceTo->setValue(m_ui->scanSequenceFrom->value() +
+								   matrixDims.width() * matrixDims.height() - 1);
+	m_ui->scanSequenceTo->setMinimum(m_ui->scanSequenceFrom->value());
+	update();
+}
+
+void CaptureDialog::on_scanSequenceTo_valueChanged(int )
+{
+	m_scanner->setSequence(m_ui->scanSequenceFrom->value(), m_ui->scanSequenceTo->value() + 1);
 	update();
 }

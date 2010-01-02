@@ -14,7 +14,8 @@ NewSequenceDialog::NewSequenceDialog(QFileInfo basePath, QWidget *parent) :
 	m_ui->sourceDriveBox->addItem(CopyCat::instance()->devicePath().absoluteFilePath());
 	/// @todo populate choices with all the removable drives via HAL (DBus)
 	/// http://indhubharathi.wordpress.com/2008/08/17/listing-all-removable-devices-in-linux/
-	DeviceFinder finder;
+//	DeviceFinder finder;
+	m_ui->directoryPathLabel->setText(m_basePath.absoluteFilePath() + "/?");
 }
 
 NewSequenceDialog::~NewSequenceDialog()
