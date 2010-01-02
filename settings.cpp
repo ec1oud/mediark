@@ -15,7 +15,7 @@ Settings::Settings(QObject* parent) :
 {
 	qDebug() << "settings stored at" << fileName();
 	m_allMediaTypes << FIVE_N_QUARTER_INCH << THREE_N_HALF_INCH;
-	beginGroup(SETTING_SCAN_GEOMETRY);
+	beginGroup(SETTING_GROUP_SCAN_GEOMETRY);
 	QRectF r = parseGeometryString(value(FIVE_N_QUARTER_INCH).toString());
 	if (r.isNull())
 		setValue(FIVE_N_QUARTER_INCH, QVariant(toString(QRectF(0, 0, 150, 150))));
@@ -52,7 +52,7 @@ void Settings::setInt(QString group, QString key, int val)
 
 QRectF Settings::scanGeometry(QString mediaType)
 {
-	beginGroup(SETTING_SCAN_GEOMETRY);
+	beginGroup(SETTING_GROUP_SCAN_GEOMETRY);
 	QRectF ret = parseGeometryString(value(mediaType).toString());
 	endGroup();
 	return ret;
@@ -60,8 +60,23 @@ QRectF Settings::scanGeometry(QString mediaType)
 
 void Settings::setScanGeometry(QString mediaType, QRectF geom)
 {
-	beginGroup(SETTING_SCAN_GEOMETRY);
+	beginGroup(SETTING_GROUP_SCAN_GEOMETRY);
 	setValue(mediaType, QVariant(toString(geom)));
+	endGroup();
+}
+
+QSize Settings::matrixDims(QString mediaType)
+{
+	beginGroup(SETTING_GROUP_SCAN_MATRIX);
+	QSize ret = parseSizeString(value(mediaType).toString());
+	endGroup();
+	return ret;
+}
+
+void Settings::setMatrixDims(QString mediaType, QSize dims)
+{
+	beginGroup(SETTING_GROUP_SCAN_MATRIX);
+	setValue(mediaType, QVariant(QString("%1,%2").arg(dims.width()).arg(dims.height())));
 	endGroup();
 }
 
@@ -71,14 +86,26 @@ QRectF Settings::parseGeometryString(QString geom)
 	if (nums.size() != 4)
 		return QRectF();	// null rect
 	bool ok0, ok1, ok2, ok3;
-	foreach (QString num, nums)
-		qDebug() << "for " << num << " we gets " << num.toDouble(NULL);
+//	foreach (QString num, nums)
+//		qDebug() << "for " << num << " we gets " << num.toDouble(NULL);
 	qreal x = nums[0].toDouble(&ok0);
 	qreal y = nums[1].toDouble(&ok1);
 	QRectF ret( x, y, nums[2].toDouble(&ok2) - x, nums[3].toDouble(&ok3) - y );
 	if (ok0 && ok1 && ok2 && ok3)
 		return ret;
 	return QRectF();
+}
+
+QSize Settings::parseSizeString(QString geom)
+{
+	QVector<QString> nums = QVector<QString>::fromList(geom.split(","));
+	if (nums.size() != 2)
+		return QSize();	// null size
+	bool ok0, ok1;
+	QSize ret(nums[0].toInt(&ok0), nums[1].toInt(&ok1));
+	if (ok0 && ok1)
+		return ret;
+	return QSize();
 }
 
 QString Settings::toString(QRectF r)

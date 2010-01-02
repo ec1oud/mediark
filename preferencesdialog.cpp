@@ -111,12 +111,15 @@ void PreferencesDialog::on_resolutionEdit_editingFinished()
 void PreferencesDialog::on_mediaTypes_currentIndexChanged(QString mediaType)
 {
 	QRectF rect = Settings::instance()->scanGeometry(mediaType);
-	qDebug() << rect;
-	qDebug() << "br_x" << QString::number(rect.right());
+//	qDebug() << rect;
+//	qDebug() << "br_x" << QString::number(rect.right());
 	m_ui->tl_x_edit->setText(QString::number(rect.left()));
 	m_ui->tl_y_edit->setText(QString::number(rect.top()));
 	m_ui->br_x_edit->setText(QString::number(rect.right()));
 	m_ui->br_y_edit->setText(QString::number(rect.bottom()));
+	QSize matrixDims = Settings::instance()->matrixDims(mediaType);
+	m_ui->matrixColumns->setValue(matrixDims.width());
+	m_ui->matrixRows->setValue(matrixDims.height());
 	updateDimensionLabels(rect);
 }
 
@@ -124,4 +127,16 @@ void PreferencesDialog::updateDimensionLabels(QRectF rect)
 {
 	m_ui->widthLabel->setText(QString::number(rect.width()));
 	m_ui->heightLabel->setText(QString::number(rect.height()));
+}
+
+void PreferencesDialog::on_matrixColumns_valueChanged(int val)
+{
+	Settings::instance()->setMatrixDims(m_ui->mediaTypes->currentText(),
+		QSize(m_ui->matrixColumns->value(), m_ui->matrixRows->value()));
+}
+
+void PreferencesDialog::on_matrixRows_valueChanged(int val)
+{
+	Settings::instance()->setMatrixDims(m_ui->mediaTypes->currentText(),
+		QSize(m_ui->matrixColumns->value(), m_ui->matrixRows->value()));
 }

@@ -9,7 +9,7 @@ CopyCat::CopyCat()
 	/// @todo use preferences
 	m_currentPlugin = ddp;
 	m_devicePath = Settings::instance()->stringOrDefault(
-			"session", "captureDevice", "/dev/fd0");
+			SETTING_GROUP_SESSION, "captureDevice", "/dev/fd0");
 }
 
 CopyCat* CopyCat::instance()
@@ -27,7 +27,7 @@ Plugin* CopyCat::selectPlugin(QString name)
 void CopyCat::setDevicePath(QFileInfo dp)
 {
 	m_devicePath = dp;
-	Settings::instance()->setString("session", "captureDevice", dp.absoluteFilePath());
+	Settings::instance()->setString(SETTING_GROUP_SESSION, "captureDevice", dp.absoluteFilePath());
 }
 
 QStringList CopyCat::allPlugins()

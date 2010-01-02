@@ -4,23 +4,23 @@
 Plugin::Plugin()
 {
 	m_outputImagePath = Settings::instance()->
-		stringOrDefault("session", "sequenceDir");
-	m_sequence = Settings::instance()->intOrDefault("session", "sequenceNum", 0);
+		stringOrDefault(SETTING_GROUP_SESSION, "sequenceDir");
+	m_sequence = Settings::instance()->intOrDefault(SETTING_GROUP_SESSION, "sequenceNum", 0);
 }
 
 void Plugin::setPathAndSequenceStart(QFileInfo path, int start)
 {
 	m_outputImagePath = path;
 	m_sequence = start;
-	Settings::instance()->setString("session", "sequenceDir", path.absoluteFilePath());
-	Settings::instance()->setInt("session", "sequenceNum", m_sequence);
+	Settings::instance()->setString(SETTING_GROUP_SESSION, "sequenceDir", path.absoluteFilePath());
+	Settings::instance()->setInt(SETTING_GROUP_SESSION, "sequenceNum", m_sequence);
 }
 
 QFileInfo Plugin::takeNextImageOutput()
 {
 	QFileInfo ret = nextImageOutput();
 	++m_sequence;
-	Settings::instance()->setInt("session", "sequenceNum", m_sequence);
+	Settings::instance()->setInt(SETTING_GROUP_SESSION, "sequenceNum", m_sequence);
 	return ret;
 }
 

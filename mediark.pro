@@ -16,7 +16,9 @@ SOURCES += main.cpp \
     copycat.cpp \
     plugin.cpp \
     devicefinder.cpp \
-    hal_manager_interface.cpp
+    hal_manager_interface.cpp \
+    progressiveplugin.cpp \
+    shellplugin.cpp
 HEADERS += mainwindow.h \
     capturedialog.h \
     settings.h \
@@ -28,7 +30,9 @@ HEADERS += mainwindow.h \
     copycat.h \
     plugin.h \
     devicefinder.h \
-    hal_manager_interface.h
+    hal_manager_interface.h \
+    progressiveplugin.h \
+    shellplugin.h
 FORMS += mainwindow.ui \
     capturedialog.ui \
     preferencesdialog.ui \

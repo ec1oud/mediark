@@ -7,7 +7,7 @@
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	archiveDir(Settings::instance()->stringOrDefault("session", "archiveDir", "."))
+	archiveDir(Settings::instance()->stringOrDefault(SETTING_GROUP_SESSION, "archiveDir", "."))
 {
     ui->setupUi(this);
 	refreshArchives();
@@ -39,7 +39,7 @@ void MainWindow::on_actionOpen_archive_dir_triggered()
 	QString dir = QFileDialog::getExistingDirectory(
 			this, "Choose a location to store sets of disk images",
 			archiveDir.absoluteFilePath(), QFileDialog::ShowDirsOnly);
-	Settings::instance()->setString("session", "archiveDir", dir);
+	Settings::instance()->setString(SETTING_GROUP_SESSION, "archiveDir", dir);
 	archiveDir = QFileInfo(dir);
 	refreshArchives();
 }

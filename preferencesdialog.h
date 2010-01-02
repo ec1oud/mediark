@@ -22,7 +22,9 @@ private:
     Ui::PreferencesDialog *m_ui;
 
 private slots:
-	void on_resolutionEdit_editingFinished();
+	void on_matrixRows_valueChanged(int );
+ void on_matrixColumns_valueChanged(int );
+ void on_resolutionEdit_editingFinished();
  void on_mediaTypes_currentIndexChanged(QString );
 	void on_tl_x_edit_editingFinished();
 	void on_tl_y_edit_editingFinished();

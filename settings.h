@@ -20,7 +20,13 @@ public:
 	void setString(QString group, QString key, QString val);
 	QRectF scanGeometry(QString mediaType);
 	void setScanGeometry(QString mediaType, QRectF geom);
-
+	/**
+		Matrix dimensions: how many columns (the width), how many rows (the height).
+		QSize is used just because it's a convenient pre-existing class with 2 ints,
+		but the units are floppies (or other media) rather than pixels.
+	*/
+	QSize matrixDims(QString mediaType);
+	void setMatrixDims(QString mediaType, QSize dims);
 	QStringList allMediaTypes() { return m_allMediaTypes; }
 	QString chosenScanner() { return stringOrDefault("main", "scanner"); }
 	void chosenScanner(QString v) { setString("main", "scanner", v); }
@@ -29,6 +35,7 @@ protected:
     Settings(QObject* parent = NULL);
     ~Settings();
 	QRectF parseGeometryString(QString geom);
+	QSize parseSizeString(QString geom);
 	QString toString(QRectF r);
 	QStringList m_allMediaTypes;
 };

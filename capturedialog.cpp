@@ -19,7 +19,6 @@ CaptureDialog::CaptureDialog(QWidget *parent) :
 			m_ui->scanProgressBar, SLOT(setValue(int)));
 	connect(m_scanner, SIGNAL(done(QImage)),
 			this, SLOT(imageScanned(QImage)));
-	m_ui->captureSequenceNumber->setValue(CopyCat::instance()->nextSequenceNumber());
 }
 
 CaptureDialog::~CaptureDialog()
@@ -52,6 +51,7 @@ void CaptureDialog::showEvent(QShowEvent* event)
 	m_ui->captureProgressBar->setValue(0);
 	m_ui->scanImageLabel->setText("Disk\nImage");
 	m_ui->captureImageLabel->setText("Disk\nImage");
+	m_ui->captureSequenceNumber->setValue(CopyCat::instance()->nextSequenceNumber());
 	update();
 }
 
