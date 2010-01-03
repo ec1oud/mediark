@@ -11,7 +11,7 @@ public:
     DDPlugin();
 	virtual QString name() { return "Internal DD (record copier)"; }
 	virtual void start(QFileInfo device);
-	virtual QString fileExt() { return "dd"; }
+	virtual QString fileExt() { return "img"; }
 };
 
 #endif // DDPLUGIN_H
