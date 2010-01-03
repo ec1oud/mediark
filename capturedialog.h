@@ -17,6 +17,7 @@ public:
 
 public slots:
 	void imageScanned(QImage img);
+	void diskCaptured();
 
 protected:
     void changeEvent(QEvent *e);

@@ -54,6 +54,12 @@ void CaptureDialog::imageScanned(QImage img)
 	m_ui->scanImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
 }
 
+void CaptureDialog::diskCaptured()
+{
+	m_ui->captureSequenceNumber->setValue(m_ui->captureSequenceNumber->value() + 1);
+	disconnect(CopyCat::instance()->currentPlugin(), SIGNAL(done(bool)), this, NULL);
+}
+
 void CaptureDialog::showEvent(QShowEvent* /*event*/)
 {
 	m_ui->scanProgressBar->setValue(0);
@@ -76,6 +82,8 @@ void CaptureDialog::on_captureButton_clicked()
 {
 	m_ui->captureImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
 //	m_ui->scanImageLabel->setText("Disk\nImage");
+	connect(CopyCat::instance()->currentPlugin(), SIGNAL(done(bool)),
+			this, SLOT(diskCaptured()));
 	CopyCat::instance()->go(m_ui->captureProgressBar, m_scannedImage);
 	CaptureDialog::update();
 //	m_ui->captureImageLabel->setText("Disk\nImage");

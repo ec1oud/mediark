@@ -38,5 +38,6 @@ void DDPlugin::start(QFileInfo device)
 	}
 	emit totalRecords(0, 100);
 	emit recordsCopied(100);
+	emit done(true);
 	dev.close();
 }
