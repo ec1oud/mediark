@@ -4,6 +4,7 @@
 #include "copycat.h"
 #include "plugin.h"
 #include <QDebug>
+#include <QDir>
 
 CaptureDialog::CaptureDialog(QWidget *parent) :
     QDialog(parent),
@@ -53,7 +54,7 @@ void CaptureDialog::imageScanned(QImage img)
 	m_ui->scanImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
 }
 
-void CaptureDialog::showEvent(QShowEvent* event)
+void CaptureDialog::showEvent(QShowEvent* /*event*/)
 {
 	m_ui->scanProgressBar->setValue(0);
 	m_ui->captureProgressBar->setValue(0);
@@ -74,10 +75,10 @@ void CaptureDialog::on_scanButton_clicked()
 void CaptureDialog::on_captureButton_clicked()
 {
 	m_ui->captureImageLabel->setPixmap(QPixmap::fromImage(m_scannedImage));
-	m_ui->scanImageLabel->setText("Disk\nImage");
+//	m_ui->scanImageLabel->setText("Disk\nImage");
 	CopyCat::instance()->go(m_ui->captureProgressBar, m_scannedImage);
 	CaptureDialog::update();
-	m_ui->captureImageLabel->setText("Disk\nImage");
+//	m_ui->captureImageLabel->setText("Disk\nImage");
 }
 
 void CaptureDialog::update()
@@ -88,9 +89,18 @@ void CaptureDialog::update()
 	m_ui->captureDataLabel->setText(QString("%1 -> %2")
 		.arg(CopyCat::instance()->devicePath().absoluteFilePath())
 		.arg(CopyCat::instance()->currentPlugin()->nextImageOutput().absoluteFilePath()));
+	QFileInfo graphicFi = CopyCat::instance()->currentPlugin()->nextImageOutput();
+	graphicFi = QFileInfo(graphicFi.dir(), graphicFi.baseName() + ".jpg");
+	if (graphicFi.exists())
+	{
+		QPixmap pm(graphicFi.absoluteFilePath());
+		m_ui->captureImageLabel->setPixmap(pm);
+	}
+	else
+		m_ui->captureImageLabel->setText("No\nImage");
 }
 
-void CaptureDialog::on_scanSequenceNumber_valueChanged(int val)
+void CaptureDialog::on_scanSequenceNumber_valueChanged(int)
 {
 	update();
 }

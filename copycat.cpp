@@ -42,7 +42,7 @@ void CopyCat::setNextSequenceNumber(int v)
 
 void CopyCat::go(QProgressBar* progressBar, QImage scannedImage)
 {
-	m_image = scannedImage;
+//	m_image = scannedImage;
 	Plugin* impl = CopyCat::instance()->currentPlugin();
 	connect(impl, SIGNAL(totalRecords(int, int)),
 			progressBar, SLOT(setRange(int,int)));
@@ -56,8 +56,5 @@ void CopyCat::go(QProgressBar* progressBar, QImage scannedImage)
 void CopyCat::run()
 {
 	Plugin* impl = CopyCat::instance()->currentPlugin();
-	QFileInfo diskImagePath = impl->nextImageOutput();
-	QFileInfo scannedImagePath(diskImagePath.dir(), diskImagePath.baseName() + ".jpg");
-	m_image.save(scannedImagePath.absoluteFilePath());
 	impl->start(devicePath());
 }

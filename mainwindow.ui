@@ -59,21 +59,21 @@
   </action>
   <action name="actionOpen_archive_dir">
    <property name="text">
-    <string>&amp;Open archive dir...</string>
+    <string>Open archive &amp;dir...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+O</string>
+    <string>Ctrl+D</string>
    </property>
   </action>
   <action name="actionNew_sequence">
    <property name="text">
-    <string>&amp;New sequence...</string>
+    <string>&amp;Open or create sequence...</string>
    </property>
    <property name="toolTip">
     <string>Create a new set of disk images within the open archive directory</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="actionAdd_media">

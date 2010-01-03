@@ -34,7 +34,7 @@ private:
 	QMap<QString, Plugin*> plugins;
 	Plugin* m_currentPlugin;
 	QFileInfo m_devicePath;
-	QImage m_image;
+//	QImage m_image;
 };
 
 #endif // COPYCAT_H
