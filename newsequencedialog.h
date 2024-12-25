@@ -1,7 +1,7 @@
 #ifndef NEWSEQUENCEDIALOG_H
 #define NEWSEQUENCEDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QFileInfo>
 
 namespace Ui {

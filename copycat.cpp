@@ -8,8 +8,8 @@ CopyCat::CopyCat()
 	plugins.insert(ddp->name(), ddp);
 	/// @todo use preferences
 	m_currentPlugin = ddp;
-	m_devicePath = Settings::instance()->stringOrDefault(
-			SETTING_GROUP_SESSION, "captureDevice", "/dev/fd0");
+    m_devicePath = QFileInfo(Settings::instance()->stringOrDefault(
+            SETTING_GROUP_SESSION, "captureDevice", "/dev/fd0"));
 }
 
 CopyCat* CopyCat::instance()

@@ -123,7 +123,7 @@ void ImageScanner::run()
 			tr("Please choose a scanner first (in preferences)."));
 		emit done(QImage());
 	}
-	SANE_Status status = sane_open(scannerDev.toAscii().constData(), &m_scanner);
+    SANE_Status status = sane_open(scannerDev.toLatin1().constData(), &m_scanner);
 	if (status != SANE_STATUS_GOOD)
 	{
 		QMessageBox::critical(QApplication::activeWindow(), tr(STR_PRODUCT),

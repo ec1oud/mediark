@@ -66,14 +66,15 @@ void NewSequenceDialog::on_buttonBox_accepted()
 		qDebug() << "looking for existing images in" << fi.absoluteFilePath();
 		QStringList filters;
 		filters << "*.dd" << "*.iso";
-		QRegExp sequenceExtractor("\\D+(\\d+)\\D*");
+        QRegularExpression sequenceExtractor("\\D+(\\d+)\\D*");
 		QDir dir(fi.absoluteFilePath());
 		foreach (QString e, dir.entryList(filters))
 		{
-			if (sequenceExtractor.exactMatch(e))
+            QRegularExpressionMatch match = sequenceExtractor.match(e);
+            if (match.hasCaptured(1))
 			{
 				bool ok = false;
-				int idx = sequenceExtractor.cap(1).toInt(&ok);
+                int idx = match.captured(1).toInt(&ok);
 //				qDebug() << e << ":" << idx;
 				if (ok && idx > highest)
 					highest = idx;
@@ -88,7 +89,7 @@ void NewSequenceDialog::on_buttonBox_accepted()
 	}
 	CopyCat::instance()->setDevicePath(QFileInfo(m_ui->sourceDriveBox->currentText()));
 	CopyCat::instance()->currentPlugin()->
-			setPathAndSequenceStart(m_ui->directoryPathLabel->text(), highest + 1);
+            setPathAndSequenceStart(QFileInfo(m_ui->directoryPathLabel->text()), highest + 1);
 }
 
 void NewSequenceDialog::on_selectFolderButton_clicked()

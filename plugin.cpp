@@ -3,8 +3,8 @@
 
 Plugin::Plugin()
 {
-	m_outputImagePath = Settings::instance()->
-		stringOrDefault(SETTING_GROUP_SESSION, "sequenceDir");
+    m_outputImagePath = QFileInfo(Settings::instance()->
+        stringOrDefault(SETTING_GROUP_SESSION, "sequenceDir"));
 	m_sequence = Settings::instance()->intOrDefault(SETTING_GROUP_SESSION, "sequenceNum", 0);
 }
 

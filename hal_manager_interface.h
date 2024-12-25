@@ -39,35 +39,35 @@ public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> AcquireGlobalInterfaceLock(const QString &interface_name, bool exclusive)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(interface_name) << qVariantFromValue(exclusive);
+        argumentList << QVariant::fromValue(interface_name) << QVariant::fromValue(exclusive);
         return asyncCallWithArgumentList(QLatin1String("AcquireGlobalInterfaceLock"), argumentList);
     }
 
     inline QDBusPendingReply<> CommitToGdl(const QString &temporary_udi, const QString &global_udi)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(temporary_udi) << qVariantFromValue(global_udi);
+        argumentList << QVariant::fromValue(temporary_udi) << QVariant::fromValue(global_udi);
         return asyncCallWithArgumentList(QLatin1String("CommitToGdl"), argumentList);
     }
 
     inline QDBusPendingReply<bool> DeviceExists(const QString &udi)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(udi);
+        argumentList << QVariant::fromValue(udi);
         return asyncCallWithArgumentList(QLatin1String("DeviceExists"), argumentList);
     }
 
     inline QDBusPendingReply<QStringList> FindDeviceByCapability(const QString &capability)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(capability);
+        argumentList << QVariant::fromValue(capability);
         return asyncCallWithArgumentList(QLatin1String("FindDeviceByCapability"), argumentList);
     }
 
     inline QDBusPendingReply<QStringList> FindDeviceStringMatch(const QString &key, const QString &value)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(key) << qVariantFromValue(value);
+        argumentList << QVariant::fromValue(key) << QVariant::fromValue(value);
         return asyncCallWithArgumentList(QLatin1String("FindDeviceStringMatch"), argumentList);
     }
 
@@ -86,21 +86,21 @@ public Q_SLOTS: // METHODS
     inline QDBusPendingReply<> ReleaseGlobalInterfaceLock(const QString &interface_name)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(interface_name);
+        argumentList << QVariant::fromValue(interface_name);
         return asyncCallWithArgumentList(QLatin1String("ReleaseGlobalInterfaceLock"), argumentList);
     }
 
     inline QDBusPendingReply<> Remove(const QString &udi)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(udi);
+        argumentList << QVariant::fromValue(udi);
         return asyncCallWithArgumentList(QLatin1String("Remove"), argumentList);
     }
 
     inline QDBusPendingReply<> SingletonAddonIsReady(const QString &command_line)
     {
         QList<QVariant> argumentList;
-        argumentList << qVariantFromValue(command_line);
+        argumentList << QVariant::fromValue(command_line);
         return asyncCallWithArgumentList(QLatin1String("SingletonAddonIsReady"), argumentList);
     }
 

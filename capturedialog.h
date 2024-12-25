@@ -1,7 +1,7 @@
 #ifndef CAPTUREDIALOG_H
 #define CAPTUREDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "imagescanner.h"
 
 namespace Ui {

@@ -4,7 +4,7 @@
 TARGET = mediark
 TEMPLATE = app
 CONFIG += debug
-QT += dbus
+QT += dbus widgets
 SOURCES += main.cpp \
     mainwindow.cpp \
     capturedialog.cpp \
